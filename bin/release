@@ -5,6 +5,7 @@ cat << EOF
 addons:
 config_vars:
   PATH: bin:/usr/bin:/bin
+  LD_LIBRARY_PATH=/usr/lib
 default_process_types:
   hello: cat hello.txt
 EOF
