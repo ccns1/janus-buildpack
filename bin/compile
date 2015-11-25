@@ -6,6 +6,6 @@ indent() {
 
 echo "-----> Starting Janus install.."
 
-echo "doing stuff"
+find / -name "Aptfile"
 
 echo "-----> Janus install complete"
