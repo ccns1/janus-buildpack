@@ -6,11 +6,6 @@ indent() {
 
 echo "-----> Starting Janus install.."
 
-exec > >(tee aws_janus_build.log)
-exec 2>&1
-set -e
-################# COMPILE ############
-# Update and Upgrade, otherwise the build may fail due to inconsistencies
-sudo apt-get update -y && sudo apt-get upgrade -y
+apt-get install -y git
 
 echo "-----> Janus install complete"
