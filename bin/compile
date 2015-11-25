@@ -6,7 +6,6 @@ indent() {
 
 echo "-----> Found setup-janus.sh"
 
-chmod +x setup-janus.sh
 ./setup-janus.sh
 
 echo "-----> Janus install complete"
