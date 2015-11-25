@@ -6,6 +6,6 @@ indent() {
 
 echo "-----> Starting Janus install.."
 
-sudo apt-get install -y git
+echo "doing stuff"
 
 echo "-----> Janus install complete"
