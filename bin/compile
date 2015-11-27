@@ -13,10 +13,7 @@ cd $1
 while read url; do
   cd $1
   echo Fetching $url
-  dir=$(grep -oP "[^/]*(?=\.tar)" <<< $url)
-  [ ! -d $dir ] && curl -s $url | tar xz
-  echo "-----> Tar retrieved.."
-  cd $dir
+  [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar xz && cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   ./configure --prefix=/usr
   make
   make install
