@@ -12,12 +12,15 @@ cd $1
 
 while read url; do
   cd $1
-  $dir=$(grep -oP "[^/]*(?=\.tar)" <<< $url)
-  [ ! -d $dir ] && curl -s $url | tar xz && 
-  cd $dir
+  echo "-----> Fetching $url..."
+  [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar xz
+  cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
+  echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   ./configure --prefix=/usr
+  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make
   make install
+  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
 done < .janustars
 
 echo "-----> Janus install complete"
