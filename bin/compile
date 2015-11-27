@@ -6,6 +6,19 @@ indent() {
 
 echo "-----> Starting Janus install.."
 
-find / -name "Aptfile"
+ln -s /usr/include/libv4l1-videodev.h /usr/include/linux/videodev.h
+
+cd $1
+
+while read url; do
+  cd $1
+  echo Fetching $url
+  dir=$(grep -oP "[^/]*(?=\.tar)" <<< $url)
+  [ ! -d $dir ] && curl -s $url | tar xz
+  cd $dir
+  ./configure --prefix=/usr
+  make
+  make install
+done < .janustars
 
 echo "-----> Janus install complete"
