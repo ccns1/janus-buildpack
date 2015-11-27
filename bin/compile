@@ -15,6 +15,7 @@ while read url; do
   echo Fetching $url
   dir=$(grep -oP "[^/]*(?=\.tar)" <<< $url)
   [ ! -d $dir ] && curl -s $url | tar xz
+  echo "-----> Tar retrieved.."
   cd $dir
   ./configure --prefix=/usr
   make
