@@ -16,7 +16,7 @@ while read url; do
   [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar xz
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  ./configure --prefix=/app/bin
+  ./configure --prefix=/app
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
@@ -27,12 +27,6 @@ yasm --version
 find / -name yasm
 echo $PATH
 ls -ld /app/bin
-ls -ld /app/vendor/bundle/bin
-ls -ld /app/vendor/bundle/ruby/2.2.0/bin
-ls -ld /usr/local/bin
-ls -ld /usr/bin
-ls -ld /bin
-ls -ld /tmp/codon/vendor/bin
 
 echo $LD_LIBRARY_PATH
 
