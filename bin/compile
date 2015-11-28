@@ -19,8 +19,11 @@ while read url; do
   ./configure --prefix=/usr
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make
-  make install
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
 done < .janustars
+
+cd $1
+yasm --version
+find / -name yasm
 
 echo "-----> Janus install complete"
