@@ -18,8 +18,7 @@ while read url; do
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   ./configure --prefix=/app/bin
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  make
-  sudo make install
+  make && make install
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
 done < .janustars
 
@@ -28,6 +27,13 @@ yasm --version
 find / -name yasm
 echo $PATH
 ls -ld /app/bin
+ls -ld /app/vendor/bundle/bin
+ls -ld /app/vendor/bundle/ruby/2.2.0/bin
+ls -ld /usr/local/bin
+ls -ld /usr/bin
+ls -ld /bin
+ls -ld /tmp/codon/vendor/bin
+
 echo $LD_LIBRARY_PATH
 
 echo "-----> Janus install complete"
