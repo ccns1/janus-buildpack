@@ -10,19 +10,21 @@ echo "-----> Starting Janus install.."
 
 cd $1
 
-#while read url; do
-#  cd $1
-#  echo "-----> Fetching $url..."
-#  [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar xz
-#  cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
-#  echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-#  ./configure --prefix=/usr
-#  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-#  make
-#  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
-#done < .janustars
+while read url; do
+  cd $1
+  echo "-----> Fetching $url..."
+  [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar xz
+  cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
+  echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
+  ./configure --prefix=/usr/local
+  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
+  make
+  make install
+  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
+done < .janustars
 
 cd $1
+yasm --version
 find / -name yasm
 cd yasm-1.3.0
 yasm --version
