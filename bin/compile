@@ -10,7 +10,11 @@ echo "-----> Starting Janus install.."
 
 cd $1
 
-ls -R /app/include
+find / -name libv4l1-videodev.h
+
+ls -R $1/app/include
+
+ln -s /usr/include/libv4l1-videodev.h /app/include/linux/videodev.h
 
 #while read url; do
 #  cd $1
