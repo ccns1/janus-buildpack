@@ -10,24 +10,22 @@ echo "-----> Starting Janus install.."
 
 cd $1
 
-while read url; do
-  cd $1
-  echo "-----> Fetching $url..."
-  [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar xz
-  cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
-  echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  ./configure --prefix=/app
-  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  make && make install
-  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
-done < .janustars
+ls -R /app/include
+
+#while read url; do
+#  cd $1
+#  echo "-----> Fetching $url..."
+#  [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar xz
+#  cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
+#  echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
+#  CFLAGS='-w' ./configure --prefix=/app --disable-fatal-warnings
+#  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
+#  make && make install
+#  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
+#done < .janustars
 
 cd $1
 yasm --version
-find / -name yasm
-echo $PATH
-ls -ld /app/bin
-
 echo $LD_LIBRARY_PATH
 
 echo "-----> Janus install complete"
