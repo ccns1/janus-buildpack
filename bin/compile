@@ -10,23 +10,19 @@ echo "-----> Starting Janus install.."
 
 cd $1
 
-find / -name libv4l1-videodev.h
+ln -s $1/.apt/usr/include/libv4l1-videodev.h $1/.apt/usr/include/linux/videodev.h
 
-ls -R $1/app/include
-
-ln -s /usr/include/libv4l1-videodev.h /app/include/linux/videodev.h
-
-#while read url; do
-#  cd $1
-#  echo "-----> Fetching $url..."
-#  [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar xz
-#  cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
-#  echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-#  CFLAGS='-w' ./configure --prefix=/app --disable-fatal-warnings
-#  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-#  make && make install
-#  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
-#done < .janustars
+while read url; do
+  cd $1
+  echo "-----> Fetching $url..."
+  [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar xz
+  cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
+  echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
+  CFLAGS='-w' ./configure --prefix=/app --disable-fatal-warnings
+  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
+  make && make install
+  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
+done < .janustars
 
 cd $1
 yasm --version
