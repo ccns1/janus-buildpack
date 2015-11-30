@@ -47,7 +47,7 @@ while read url; do
   fi
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
   cd ..
-done < .janustars
+done < $1/.janustars
 
 echo $PKG_CONFIG_PATH
 pkg-config --modversion --print-errors "orc-0.4"
