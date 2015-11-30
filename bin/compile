@@ -15,8 +15,6 @@ USR="$1/.apt/usr"
 mkdir $USR/include/linux
 ln -s $USR/include/libv4l1-videodev.h $USR/include/linux/videodev.h
 
-export CFLAGS="$CFLAGS -fPIC"
-export CXXFLAGS="$CXXFLAGS -fPIC"
 export PATH="$PATH:$USR/bin"
 export INCLUDE_PATH="$INCLUDE_PATH:$USR/include"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$USR/lib"
@@ -32,7 +30,7 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w -fPIC' ./configure --prefix=$USR --enable-shared --disable-fatal-warnings --with-pic --disable-asfdemux --disable-dvdlpcmdec --disable-ogg --with-omx-target=generic
+  CFLAGS='-w' ./configure --prefix=$USR --enable-static --disable-fatal-warnings --disable-ogg --disable-pango --disable-goom --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --with-omx-target=generic
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)"
@@ -68,7 +66,7 @@ cd $USR
 git clone https://github.com/meetecho/janus-gateway.git
 cd janus-gateway
 sh autogen.sh
-./configure --prefix=/opt/janus
+./configure --prefix=$USR/janus-gateway
 make install
 make configs
 
