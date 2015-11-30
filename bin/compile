@@ -32,7 +32,7 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w' ./configure --prefix=$USR --enable-shared --disable-fatal-warnings
+  CFLAGS='-w -fPIC' ./configure --prefix=$USR --enable-shared --disable-fatal-warnings
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
@@ -40,6 +40,6 @@ while read url; do
 done < .janustars
 
 find / -name gstreamer-plugins-base-1.0.pc
-echo PKG_CONFIG_PATH
+echo $PKG_CONFIG_PATH
 
 echo "-----> Janus install complete"
