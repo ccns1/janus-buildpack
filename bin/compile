@@ -32,7 +32,7 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w -fPIC' ./configure --prefix=$USR --enable-shared --disable-fatal-warnings --disable-ogg --with-omx-target=generic
+  CFLAGS='-w -fPIC' ./configure --prefix=$USR --enable-shared --disable-fatal-warnings --with-pic --disable-asfdemux --disable-ogg --with-omx-target=generic
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)"
