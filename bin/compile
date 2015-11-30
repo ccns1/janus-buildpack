@@ -20,7 +20,12 @@ ln -s $1/.apt/usr/include/libv4l1-videodev.h $1/.apt/usr/include/linux/videodev.
 while read url; do
   cd $1
   echo "-----> Fetching $url..."
-  [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ] && curl -s $url | tar -xvf
+  if [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ]
+  	echo "-----> Fetching $url..."
+  	then
+  	wget $url 
+  	tar -xvf $(grep -oP "[^/]*.tar[^/]*" <<< $url)
+  fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   CFLAGS='-w' ./configure --prefix=/app --disable-fatal-warnings
@@ -29,8 +34,38 @@ while read url; do
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
 done < .janustars
 
+wget http://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.2.0.tar.xz
+tar -xvf $1/gst-omx-1.2.0.tar.xz
+cd $1/gst-omx-1.2.0
+CFLAGS='-w' ./configure --prefix=/app --disable-fatal-warnings --with-omx-target=generic
+make && make install
 cd $1
-yasm --version
-echo $LD_LIBRARY_PATH
+git clone https://github.com/alanxz/rabbitmq-c
+cd $1/rabbitmq-c
+git submodule init
+git submodule update
+autoreconf -i
+./configure --prefix=/app && make && make install
+cd $1
+svn co http://sctp-refimpl.googlecode.com/svn/trunk/KERN/usrsctp usrsctp
+cd $1/usrsctp
+./bootstrap
+./configure --prefix=/app && make && make install
+cd $1
+git clone git://git.libwebsockets.org/libwebsockets
+mkdir $1/libwebsockets/build && cd $1/libwebsockets/build
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/app ..
+make && make install
+cd $1
+git clone https://github.com/meetecho/janus-gateway.git
+cd janus-gateway
+sh autogen.sh
+./configure --prefix=/opt/janus --enable-docs
+make install
+#make configs
+export LD_LIBRARY_PATH=/app/lib
+
+cd $1/janus-gateway
+janus --version
 
 echo "-----> Janus install complete"
