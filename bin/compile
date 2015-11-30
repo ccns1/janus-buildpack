@@ -17,29 +17,41 @@ USR="$1/.apt/usr"
 mkdir $USR/include/linux
 ln -s $USR/include/libv4l1-videodev.h $USR/include/linux/videodev.h
 
-export PATH="$USR/bin:$PATH"
-export INCLUDE_PATH="$USR/include:$INCLUDE_PATH"
-export LD_LIBRARY_PATH="$USR/lib:$LD_LIBRARY_PATH"
-export PKG_CONFIG_PATH="$USR/lib/pkgconfig:$PKG_CONFIG_PATH"
+export CFLAGS="$CFLAGS -fPIC"
+export CXXFLAGS="$CXXFLAGS -fPIC"
+export PATH="$PATH:$USR/bin"
+export INCLUDE_PATH="$INCLUDE_PATH:$USR/include"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$USR/lib"
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/lib/pkgconfig"
 
+cd $USR/
 while read url; do
   echo "-----> Fetching $url..."
   if [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ]
-  	echo "-----> Fetching $url..."
   	then
+  	echo "-----> Fetching $url..."
   	wget $url 
   	tar -xvf $(grep -oP "[^/]*.tar[^/]*" <<< $url)
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w -fPIC' ./configure --prefix=$USR --enable-shared --disable-fatal-warnings
+  CFLAGS='-w -fPIC' ./configure --prefix=$USR --enable-shared --disable-fatal-warnings --disable-ogg
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
+  export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)"
+  if [ -d pkgconfig ]
+  	then export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)/pkgconfig"
+  fi
+  if [ -d libs/pkgconfig ]
+  	then export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)/libs/pkgconfig"
+  fi
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
   cd ..
-done < .janustars
+done < .testtars
 
-find / -name gstreamer-plugins-base-1.0.pc
 echo $PKG_CONFIG_PATH
+pkg-config --modversion --print-errors "orc-0.4"
+pkg-config --modversion --print-errors "gstreamer-plugins-base-1.0"
+
 
 echo "-----> Janus install complete"
