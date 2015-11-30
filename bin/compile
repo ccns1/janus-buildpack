@@ -17,6 +17,11 @@ cd $1
 mkdir $1/.apt/usr/include/linux
 ln -s $1/.apt/usr/include/libv4l1-videodev.h $1/.apt/usr/include/linux/videodev.h
 
+export PATH="/app/bin:$PATH"
+export INCLUDE_PATH="/app/include:$INCLUDE_PATH"
+export LD_LIBRARY_PATH="/app/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/app/lib/pkgconfig:$PKG_CONFIG_PATH"
+
 while read url; do
   cd $1
   echo "-----> Fetching $url..."
@@ -63,7 +68,6 @@ sh autogen.sh
 ./configure --prefix=/opt/janus --enable-docs
 make install
 #make configs
-export LD_LIBRARY_PATH=/app/lib
 
 cd $1/janus-gateway
 janus --version
