@@ -13,6 +13,7 @@ set -e
 
 cd $1
 
+find / -name libv4l1-videodev.h
 #ln -s $1/.apt/usr/include/libv4l1-videodev.h $1/.apt/usr/include/linux/videodev.h
 
 while read url; do
