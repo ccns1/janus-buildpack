@@ -10,8 +10,6 @@ exec > >(tee aws_janus_build.log)
 exec 2>&1
 set -e
 
-cd $1
-
 USR="$1/.apt/usr"
 
 mkdir $USR/include/linux
@@ -26,7 +24,6 @@ export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/lib/pkgconfig"
 
 cd $USR/
 while read url; do
-  echo "-----> Fetching $url..."
   if [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ]
   	then
   	echo "-----> Fetching $url..."
@@ -35,7 +32,7 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w -fPIC' ./configure --prefix=$USR --enable-shared --disable-fatal-warnings
+  CFLAGS='-w -fPIC' ./configure --prefix=$USR --enable-shared --disable-fatal-warnings --disable-ogg --with-omx-target=generic
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)"
@@ -47,11 +44,35 @@ while read url; do
   fi
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
   cd ..
+  rm $(grep -oP "[^/]*.tar[^/]*" <<< $url)
 done < $1/.janustars
 
-echo $PKG_CONFIG_PATH
-pkg-config --modversion --print-errors "orc-0.4"
-pkg-config --modversion --print-errors "gstreamer-plugins-base-1.0"
+cd $USR/
+git clone https://github.com/alanxz/rabbitmq-c
+cd $USR/rabbitmq-c
+git submodule init
+git submodule update
+autoreconf -i
+./configure --prefix=$USR && make && make install
+cd $USR
+svn co http://sctp-refimpl.googlecode.com/svn/trunk/KERN/usrsctp usrsctp
+cd $USR/usrsctp
+./bootstrap
+./configure --prefix=$USR && make && make install
+cd $USR
+git clone git://git.libwebsockets.org/libwebsockets
+mkdir $USR/libwebsockets/build && cd $USR/libwebsockets/build
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$USR ..
+make && make install
+cd $USR
+git clone https://github.com/meetecho/janus-gateway.git
+cd janus-gateway
+sh autogen.sh
+./configure --prefix=/opt/janus
+make install
+make configs
 
+cd $USR/janus-gateway
+janus --version
 
 echo "-----> Janus install complete"
