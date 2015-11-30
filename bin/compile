@@ -17,10 +17,10 @@ cd $1
 mkdir $1/.apt/usr/include/linux
 ln -s $1/.apt/usr/include/libv4l1-videodev.h $1/.apt/usr/include/linux/videodev.h
 
-export PATH="/app/bin:$PATH"
-export INCLUDE_PATH="/app/include:$INCLUDE_PATH"
-export LD_LIBRARY_PATH="/app/lib:$LD_LIBRARY_PATH"
-export PKG_CONFIG_PATH="/app/lib/pkgconfig:$PKG_CONFIG_PATH"
+export PATH="$1/.apt/usr/bin:$PATH"
+export INCLUDE_PATH="$1/.apt/usr/include:$INCLUDE_PATH"
+export LD_LIBRARY_PATH="$1/.apt/usr/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="$1/.apt/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 while read url; do
   cd $1
@@ -33,7 +33,7 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w' ./configure --prefix=/app --disable-fatal-warnings
+  CFLAGS='-w' ./configure --prefix=$1/.apt/usr --enable-shared --disable-fatal-warnings
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
@@ -42,7 +42,7 @@ done < .janustars
 wget http://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.2.0.tar.xz
 tar -xvf $1/gst-omx-1.2.0.tar.xz
 cd $1/gst-omx-1.2.0
-CFLAGS='-w' ./configure --prefix=/app --disable-fatal-warnings --with-omx-target=generic
+CFLAGS='-w' ./configure --prefix=$1/.apt/usr --disable-fatal-warnings --with-omx-target=generic
 make && make install
 cd $1
 git clone https://github.com/alanxz/rabbitmq-c
@@ -50,12 +50,12 @@ cd $1/rabbitmq-c
 git submodule init
 git submodule update
 autoreconf -i
-./configure --prefix=/app && make && make install
+./configure --prefix=$1/.apt/usr && make && make install
 cd $1
 svn co http://sctp-refimpl.googlecode.com/svn/trunk/KERN/usrsctp usrsctp
 cd $1/usrsctp
 ./bootstrap
-./configure --prefix=/app && make && make install
+./configure --prefix=$1/.apt/usr && make && make install
 cd $1
 git clone git://git.libwebsockets.org/libwebsockets
 mkdir $1/libwebsockets/build && cd $1/libwebsockets/build
