@@ -18,7 +18,7 @@ ln -s $USR/include/opus/opus.h $USR/include/opus.h
 ln -s $USR/include/opus/opus_multistream.h $USR/include/opus_multistream.h
 ln -s $USR/include/opus/opus_types.h $USR/include/opus_types.h
 ln -s $USR/include/opus/opus_defines.h $USR/include/opus_defines.h
-ln -s $USR/include/sofia-sip-1.12 /usr/include/sofia-sip-1.12
+ln -s $USR/include/sofia-sip-1.12/sofia-sip $USR/include/sofia-sip
 
 export PATH="$PATH:$USR/bin"
 export INCLUDE_PATH="$INCLUDE_PATH:$USR/include"
