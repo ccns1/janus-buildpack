@@ -8,7 +8,7 @@ echo "-----> Starting Janus install.."
 # Create a log file of the build as well as displaying the build on the tty as it runs
 exec > >(tee aws_janus_build.log)
 exec 2>&1
-set -e
+#set -e
 
 USR="$1/.apt/usr"
 
@@ -43,9 +43,9 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  LDFLAGS='-L$USR/lib' CPPFLAGS='-I$USR/include' CFLAGS='-w' ./configure --prefix=$USR --disable-fatal-warnings --disable-docs --disable-examples --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --with-omx-target=generic --disable-ogg --disable-pango --disable-goom --disable-goom2k1 --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia --disable-cdio
+  CFLAGS='-w' ./configure --prefix=$USR --disable-docs --disable-examples --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --with-omx-target=generic --disable-ogg --disable-pango --disable-goom --disable-goom2k1 --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia --disable-cdio
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  make --always-make
+  make --always-make --ignore-errors
   make install
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
   cd ..
@@ -56,8 +56,8 @@ cd $USR/
 git clone https://github.com/meetecho/janus-gateway.git
 cd janus-gateway
 sh autogen.sh
-LDFLAGS='-L$USR/lib' CPPFLAGS='-I$USR/include' CFLAGS='-w' ./configure --prefix=$USR --disable-docs --bindir=$USR/bin --includedir=$USR/include --oldincludedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --disable-rabbitmq --disable-websockets --disable-data-channels --disable-plugin-voicemail
-make --always-make
+CFLAGS='-w' ./configure --prefix=$USR --disable-docs --bindir=$USR/bin --includedir=$USR/include --oldincludedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --disable-rabbitmq --disable-websockets --disable-data-channels --disable-plugin-voicemail
+make --always-make --ignore-errors
 make install
 make configs
 
