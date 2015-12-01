@@ -15,6 +15,8 @@ USR="$1/.apt/usr"
 mkdir $USR/include/linux
 ln -s $USR/include/libv4l1-videodev.h $USR/include/linux/videodev.h
 ln -s $USR/include/opus/opus_multistream.h $USR/include/opus_multistream.h
+ln -s $USR/include/opus/opus.h $USR/include/opus.h
+
 
 export PATH="$PATH:$USR/bin"
 export INCLUDE_PATH="$INCLUDE_PATH:$USR/include"
@@ -31,16 +33,16 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w' ./configure --prefix=$USR --enable-static --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --enable-static-plugins --with-omx-target=generic --disable-ogg --disable-goom --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia
+  CFLAGS='-w' ./configure --prefix=$USR --enable-static --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --enable-static-plugins --with-omx-target=generic --disable-ogg --disable-pango --disable-goom --disable-goom2k1 --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia --disable-cdio
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)"
-  if [ -d pkgconfig ]
-  	then export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)/pkgconfig"
-  fi
-  if [ -d libs/pkgconfig ]
-  	then export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)/libs/pkgconfig"
-  fi
+  #if [ -d pkgconfig ]
+  #	then export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)/pkgconfig"
+  #fi
+  #if [ -d libs/pkgconfig ]
+  #	then export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)/libs/pkgconfig"
+  #fi
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
   cd ..
   rm $(grep -oP "[^/]*.tar[^/]*" <<< $url)
@@ -52,12 +54,12 @@ cd $USR/rabbitmq-c
 git submodule init
 git submodule update
 autoreconf -i
-./configure --prefix=$USR && make && make install
+./configure --prefix=$USR --enable-static --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share && make && make install
 cd $USR
 svn co http://sctp-refimpl.googlecode.com/svn/trunk/KERN/usrsctp usrsctp
 cd $USR/usrsctp
 ./bootstrap
-./configure --prefix=$USR && make && make install
+./configure --prefix=$USR --enable-static --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share && make && make install
 cd $USR
 git clone git://git.libwebsockets.org/libwebsockets
 mkdir $USR/libwebsockets/build && cd $USR/libwebsockets/build
@@ -67,8 +69,7 @@ cd $USR
 git clone https://github.com/meetecho/janus-gateway.git
 cd janus-gateway
 sh autogen.sh
-./configure --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share
-make install
+./configure --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share && make install && make install
 make configs
 
 cd $USR/janus-gateway
