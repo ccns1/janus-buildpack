@@ -20,7 +20,8 @@ ln -s $USR/include/opus/opus_types.h $USR/include/opus_types.h
 ln -s $USR/include/opus/opus_defines.h $USR/include/opus_defines.h
 
 export PATH="$PATH:$USR/bin"
-export INCLUDE_PATH="$INCLUDE_PATH:$USR/include:$USR/include/opus:$USR/include/sofia-sip-1.12"
+export INCLUDE_PATH="$INCLUDE_PATH:$USR/include"
+export INCLUDE_PATH="$INCLUDE_PATH:$USR/include/sofia-sip-1.12"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$USR/lib"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/lib/pkgconfig"
 
@@ -34,7 +35,7 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w' ./configure --prefix=$USR --disable-fatal-warnings --disable-docs --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --with-omx-target=generic --disable-ogg --disable-pango --disable-goom --disable-goom2k1 --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia --disable-cdio
+  CFLAGS='-w' ./configure --prefix=$USR --disable-fatal-warnings --disable-docs --disable-examples --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --with-omx-target=generic --disable-ogg --disable-pango --disable-goom --disable-goom2k1 --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia --disable-cdio
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   #export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)"
@@ -70,10 +71,10 @@ cd $USR
 git clone https://github.com/meetecho/janus-gateway.git
 cd janus-gateway
 sh autogen.sh
-./configure --prefix=$USR --exec-prefix=$USR --disable-fatal-warnings --disable-docs --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share && make install && make install
+./configure --prefix=$USR --disable-fatal-warnings --disable-docs --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share && make install && make install
 make configs
 
 cd $USR/janus-gateway
-janus --version
+./janus --version
 
 echo "-----> Janus install complete"
