@@ -12,6 +12,8 @@ set -e
 
 USR="$1/.apt/usr"
 
+find / -name opus_multistream.h
+
 mkdir $USR/include/linux
 ln -s $USR/include/libv4l1-videodev.h $USR/include/linux/videodev.h
 
@@ -30,7 +32,7 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w' ./configure --prefix=$USR --enable-static --disable-fatal-warnings --with-omx-target=generic --disable-ogg--disable-goom --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub
+  CFLAGS='-w' ./configure --prefix=$USR --enable-static --disable-fatal-warnings --with-omx-target=generic --disable-ogg --disable-goom --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)"
