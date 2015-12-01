@@ -8,7 +8,7 @@ echo "-----> Starting Janus install.."
 # Create a log file of the build as well as displaying the build on the tty as it runs
 exec > >(tee aws_janus_build.log)
 exec 2>&1
-set -e
+#set -e
 
 USR="$1/.apt/usr"
 
@@ -47,7 +47,7 @@ cd $USR/
 git clone https://github.com/meetecho/janus-gateway.git
 cd janus-gateway
 sh autogen.sh
-CPPFLAGS='-I$USR/include' CFLAGS='-w' ./configure --prefix=$USR --disable-docs --bindir=$USR/bin --includedir=$USR/include --oldincludedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --disable-rabbitmq --disable-websockets --disable-data-channels
+CPPFLAGS='-I$USR/include' CFLAGS='-w' ./configure --prefix=$USR --disable-docs --bindir=$USR/bin --includedir=$USR/include --oldincludedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --disable-rabbitmq --disable-websockets --disable-data-channels --disable-plugin-voicemail
 make
 make install
 make configs
