@@ -12,8 +12,6 @@ set -e
 
 USR="$1/.apt/usr"
 
-find / -name agent.h
-
 mkdir $USR/include/linux
 ln -s $USR/include/libv4l1-videodev.h $USR/include/linux/videodev.h
 ln -s $USR/include/opus/opus.h $USR/include/opus.h
