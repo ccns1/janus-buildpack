@@ -12,14 +12,13 @@ set -e
 
 USR="$1/.apt/usr"
 
-find / -name sofia-sip-1.12
-
 mkdir $USR/include/linux
 ln -s $USR/include/libv4l1-videodev.h $USR/include/linux/videodev.h
 ln -s $USR/include/opus/opus.h $USR/include/opus.h
 ln -s $USR/include/opus/opus_multistream.h $USR/include/opus_multistream.h
 ln -s $USR/include/opus/opus_types.h $USR/include/opus_types.h
 ln -s $USR/include/opus/opus_defines.h $USR/include/opus_defines.h
+ln -s $USR/include/sofia-sip-1.12 /usr/include/sofia-sip-1.12
 
 export PATH="$PATH:$USR/bin"
 export INCLUDE_PATH="$INCLUDE_PATH:$USR/include"
