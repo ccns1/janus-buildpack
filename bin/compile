@@ -12,13 +12,11 @@ set -e
 
 USR="$1/.apt/usr"
 
-find / -name sofia-sip*
-
 mkdir $USR/include/linux
 ln -s $USR/include/libv4l1-videodev.h $USR/include/linux/videodev.h
 
 export PATH="$PATH:$USR/bin"
-export INCLUDE_PATH="$INCLUDE_PATH:$USR/include:$USR/include/opus"
+export INCLUDE_PATH="$INCLUDE_PATH:$USR/include:$USR/include/opus:$USR/include/sofia-sip-1.12"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$USR/lib"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/lib/pkgconfig"
 
@@ -32,7 +30,7 @@ while read url; do
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w' ./configure --prefix=$USR --enable-static --disable-fatal-warnings --disable-docs --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --enable-static-plugins --with-omx-target=generic --disable-ogg --disable-pango --disable-goom --disable-goom2k1 --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia --disable-cdio
+  CFLAGS='-w' ./configure --prefix=$USR --disable-fatal-warnings --disable-docs --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --with-omx-target=generic --disable-ogg --disable-pango --disable-goom --disable-goom2k1 --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia --disable-cdio
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   make && make install
   #export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/$(grep -oP "[^/]*(?=\.tar)" <<< $url)"
@@ -53,12 +51,12 @@ cd $USR/rabbitmq-c
 git submodule init
 git submodule update
 autoreconf -i
-./configure --prefix=$USR --enable-static --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share && make && make install
+./configure --prefix=$USR --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share && make && make install
 cd $USR
 svn co http://sctp-refimpl.googlecode.com/svn/trunk/KERN/usrsctp usrsctp
 cd $USR/usrsctp
 ./bootstrap
-./configure --prefix=$USR --enable-static --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share && make && make install
+./configure --prefix=$USR --disable-fatal-warnings --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share && make && make install
 cd $USR
 git clone git://git.libwebsockets.org/libwebsockets
 mkdir $USR/libwebsockets/build && cd $USR/libwebsockets/build
