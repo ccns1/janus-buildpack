@@ -20,8 +20,6 @@ export INCLUDE_PATH="$INCLUDE_PATH:$USR/include"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$USR/lib"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/lib/pkgconfig"
 
-find / -name sofia-sip*
-
 cd $USR/
 while read url; do
   if [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ]
