@@ -50,7 +50,7 @@ sh autogen.sh
 CPPFLAGS='-I$USR/include' CFLAGS='-w' ./configure --prefix=$USR --disable-docs --bindir=$USR/bin --includedir=$USR/include --oldincludedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --disable-plugin-audiobridge --disable-plugin-echotest --disable-plugin-recordplay --disable-plugin-sip --disable-plugin-videocall --disable-plugin-videoroom --disable-plugin-voicemail --disable-rabbitmq --disable-websockets --disable-data-channels
 make
 make install
-make configs
+#make configs
 
 cd $USR/janus-gateway
 ./janus --version
