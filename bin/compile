@@ -42,11 +42,11 @@ while read url; do
   	tar -xvf $(grep -oP "[^/]*.tar[^/]*" <<< $url)
   fi
   cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
-  make clean
   echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
   LDFLAGS='-L$USR/lib' CPPFLAGS='-I$USR/include' CFLAGS='-w' ./configure --prefix=$USR --disable-fatal-warnings --disable-docs --disable-examples --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --with-omx-target=generic --disable-ogg --disable-pango --disable-goom --disable-goom2k1 --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia --disable-cdio
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  make && make install
+  make --always-make
+  make install
   echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
   cd ..
   rm $(grep -oP "[^/]*.tar[^/]*" <<< $url)
@@ -57,7 +57,7 @@ git clone https://github.com/meetecho/janus-gateway.git
 cd janus-gateway
 sh autogen.sh
 LDFLAGS='-L$USR/lib' CPPFLAGS='-I$USR/include' CFLAGS='-w' ./configure --prefix=$USR --disable-docs --bindir=$USR/bin --includedir=$USR/include --oldincludedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --disable-rabbitmq --disable-websockets --disable-data-channels --disable-plugin-voicemail
-make
+make --always-make
 make install
 make configs
 
