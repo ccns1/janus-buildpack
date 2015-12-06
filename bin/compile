@@ -10,11 +10,11 @@ exec > >(tee aws_janus_build.log)
 exec 2>&1
 #set -e
 
-APP="$1/.apt/usr"
+curl https://dl.dropboxusercontent.com/u/7664611/app.tar.gz | tar xzv
+
+APP="$1/.apt/usr/app"
 
 cd $APP
-
-curl https://dl.dropboxusercontent.com/u/7664611/app.tar.gz | tar xzv
 
 export PATH="$PATH:$APP/bin"
 export INCLUDE_PATH="$INCLUDE_PATH:$APP/include"
@@ -29,5 +29,12 @@ echo $PATH
 
 cd $APP/janus-gateway
 ./janus --version
+
+cd $APP
+
+while read shell-command; do
+  echo $shell-command
+  $shell-command
+done < $APP/gateway-start
 
 echo "-----> Janus install complete"
