@@ -12,22 +12,35 @@ exec 2>&1
 
 cd $1/.apt/usr
 
+wget https://dl.dropboxusercontent.com/u/7664611/appversion
+
+if [ -d app ] && cmp -s ./appversion $1/appversion
+then
+   echo "The files match"
+else
+   echo "The files are different"
+fi
+
 [ -d app ] && rm -R app
 
 curl https://dl.dropboxusercontent.com/u/7664611/app.tar.gz | tar xzv
 
 APP="$1/.apt/usr/app"
-
 cd $APP
 
 export PATH="$PATH:$APP/bin"
 export INCLUDE_PATH="$INCLUDE_PATH:$APP/include"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$APP/lib"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$APP/lib/pkgconfig"
-echo "export PATH=\"$PATH:$APP/bin\"" >> $HOME/.bashrc
-echo "export INCLUDE_PATH=\"$INCLUDE_PATH:$APP/include\"" >> $HOME/.bashrc
-echo "export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:$APP/lib\"" >> $HOME/.bashrc
-echo "export PKG_CONFIG_PATH=\"$PKG_CONFIG_PATH:$APP/lib/pkgconfig\"" >> $HOME/.bashrc
+echo "export PATH=\"$PATH:$APP/bin\"" >> $1/.bashrc
+echo "export INCLUDE_PATH=\"$INCLUDE_PATH:$APP/include\"" >> $1/.bashrc
+echo "export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:$APP/lib\"" >> $1/.bashrc
+echo "export PKG_CONFIG_PATH=\"$PKG_CONFIG_PATH:$APP/lib/pkgconfig\"" >> $1/.bashrc
+echo "export PATH=\"$PATH:$APP/bin\"" >> $1/.profile
+echo "export INCLUDE_PATH=\"$INCLUDE_PATH:$APP/include\"" >> $1/.profile
+echo "export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:$APP/lib\"" >> $1/.profile
+echo "export PKG_CONFIG_PATH=\"$PKG_CONFIG_PATH:$APP/lib/pkgconfig\"" >> $1/.profile
+. ~/.profile
 
 echo $PATH
 
