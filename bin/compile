@@ -37,12 +37,12 @@ echo $PATH
 
 echo "-----> Starting Janus.."
 cd $APP/janus-gateway/
-screen -d -m ./janus -F ./conf
+nohup ./janus -F ./conf &
 echo "-----> Janus daemon started."
 
 echo "-----> Starting webserver.."
 cd $APP/
-screen -d -m ./nodeJS/bin/node ./node_modules/http-server/bin/http-server ./janus-gateway/html
+nohup ./nodeJS/bin/node ./node_modules/http-server/bin/http-server ./janus-gateway/html &
 echo "-----> Webserver running."
 
 #echo "-----> Running gateway start commands"
