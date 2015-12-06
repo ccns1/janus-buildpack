@@ -31,24 +31,4 @@ echo "export PKG_CONFIG_PATH=\"$PKG_CONFIG_PATH:$APP/lib/pkgconfig\"" >> $HOME/.
 
 echo $PATH
 
-#cd $APP/janus-gateway
-#./janus --versionS
-#cd $APP
-
-#echo "-----> Starting Janus.."
-#cd $APP/janus-gateway/
-#nohup ./janus -F ./conf &
-#echo "-----> Janus daemon started."
-
-#echo "-----> Starting webserver.."
-#cd $APP/
-#nohup ./nodeJS/bin/node ./node_modules/http-server/bin/http-server ./janus-gateway/html &
-#echo "-----> Webserver running."
-
-#echo "-----> Running gateway start commands"
-#while read shell-command; do
-#  echo $shell-command
-#  $shell-command
-#done < $1/gateway-start
-
 echo "-----> Janus install complete"
