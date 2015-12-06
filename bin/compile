@@ -12,15 +12,6 @@ exec 2>&1
 
 cd $1/.apt/usr
 
-wget https://dl.dropboxusercontent.com/u/7664611/appversion
-
-if [ -d app ] && cmp -s ./appversion $1/appversion
-then
-   echo "The files match"
-else
-   echo "The files are different"
-fi
-
 [ -d app ] && rm -R app
 
 curl https://dl.dropboxusercontent.com/u/7664611/app.tar.gz | tar xzv
