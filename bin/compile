@@ -10,6 +10,10 @@ exec > >(tee aws_janus_build.log)
 exec 2>&1
 #set -e
 
+cd $1/.apt/usr
+
+[ -d app ] && rm -R app
+
 curl https://dl.dropboxusercontent.com/u/7664611/app.tar.gz | tar xzv
 
 APP="$1/.apt/usr/app"
@@ -32,6 +36,7 @@ cd $APP/janus-gateway
 
 cd $APP
 
+echo "-----> Running gateway start commands"
 while read shell-command; do
   echo $shell-command
   $shell-command
