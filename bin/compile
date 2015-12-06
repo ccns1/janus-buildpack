@@ -14,7 +14,7 @@ cd $1/.apt/usr
 
 [ -d app ] && rm -R app
 
-#curl https://dl.dropboxusercontent.com/u/7664611/app.tar.gz | tar xzv
+curl https://dl.dropboxusercontent.com/u/7664611/app.tar.gz | tar xzv
 
 APP="$1/.apt/usr/app"
 
