@@ -10,58 +10,24 @@ exec > >(tee aws_janus_build.log)
 exec 2>&1
 #set -e
 
-USR="$1/.apt/usr"
+APP="$1/.apt/usr"
 
-mkdir $USR/include/linux
-ln -s $USR/include/libv4l1-videodev.h $USR/include/linux/videodev.h
-ln -s $USR/include/opus/opus.h $USR/include/opus.h
-ln -s $USR/include/opus/opus_multistream.h $USR/include/opus_multistream.h
-ln -s $USR/include/opus/opus_types.h $USR/include/opus_types.h
-ln -s $USR/include/opus/opus_defines.h $USR/include/opus_defines.h
-ln -s $USR/include/sofia-sip-1.12/sofia-sip $USR/include/sofia-sip
-ln -s $USR/include/nice/agent.h $USR/include/agent.h
-ln -s $USR/include/nice/address.h $USR/include/address.h
-ln -s $USR/include/nice/candidate.h $USR/include/candidate.h
-ln -s $USR/include/nice/debug.h $USR/include/debug.h
-ln -s $USR/include/nice/interfaces.h $USR/include/interfaces.h
-ln -s $USR/include/nice/nice.h $USR/include/nice.h
-ln -s $USR/include/nice/pseudotcp.h $USR/include/pseudotcp.h
+cd $APP
 
-export PATH="$PATH:$USR/bin"
-export INCLUDE_PATH="$INCLUDE_PATH:$USR/include"
-export INCLUDE_PATH="$INCLUDE_PATH:$USR/include/nice"
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$USR/lib"
-export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$USR/lib/pkgconfig"
+curl https://dl.dropboxusercontent.com/u/7664611/app.tar.gz | tar xzv
 
-cd $USR/
-while read url; do
-  if [ ! -d $(grep -oP "[^/]*(?=\.tar)" <<< $url) ]
-  	then
-  	echo "-----> Fetching $url..."
-  	wget $url 
-  	tar -xvf $(grep -oP "[^/]*.tar[^/]*" <<< $url)
-  fi
-  cd $(grep -oP "[^/]*(?=\.tar)" <<< $url)
-  echo "-----> Configure $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  CFLAGS='-w' ./configure --prefix=$USR --disable-docs --disable-examples --bindir=$USR/bin --includedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --with-omx-target=generic --disable-ogg --disable-pango --disable-goom --disable-goom2k1 --disable-opencv --disable-asfdemux --disable-dvdlpcmdec --disable-dvdsub --disable-realmedia --disable-cdio
-  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url)..."
-  make --always-make --ignore-errors
-  make install
-  echo "-----> Make $(grep -oP "[^/]*(?=\.tar)" <<< $url) Complete."
-  cd ..
-  rm $(grep -oP "[^/]*.tar[^/]*" <<< $url)
-done < $1/.janustars
+export PATH="$PATH:$APP/bin"
+export INCLUDE_PATH="$INCLUDE_PATH:$APP/include"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$APP/lib"
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$APP/lib/pkgconfig"
+echo "export PATH=\"$PATH:$APP/bin\"" >> $HOME/.bashrc
+echo "export INCLUDE_PATH=\"$INCLUDE_PATH:$APP/include\"" >> $HOME/.bashrc
+echo "export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:$APP/lib\"" >> $HOME/.bashrc
+echo "export PKG_CONFIG_PATH=\"$PKG_CONFIG_PATH:$APP/lib/pkgconfig\"" >> $HOME/.bashrc
 
-cd $USR/
-git clone https://github.com/meetecho/janus-gateway.git
-cd janus-gateway
-sh autogen.sh
-CFLAGS='-w' ./configure --prefix=$USR --disable-docs --bindir=$USR/bin --includedir=$USR/include --oldincludedir=$USR/include --libdir=$USR/lib --datarootdir=$USR/share --disable-rabbitmq --disable-websockets --disable-data-channels --disable-plugin-voicemail
-make --always-make --ignore-errors
-make install
-make configs
+echo $PATH
 
-cd $USR/janus-gateway
+cd $APP/janus-gateway
 ./janus --version
 
 echo "-----> Janus install complete"
