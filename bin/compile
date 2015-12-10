@@ -23,16 +23,5 @@ export PATH="$PATH:$APP/bin"
 export INCLUDE_PATH="$INCLUDE_PATH:$APP/include"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$APP/lib"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$APP/lib/pkgconfig"
-echo "export PATH=\"$PATH:$APP/bin\"" >> $1/.bashrc
-echo "export INCLUDE_PATH=\"$INCLUDE_PATH:$APP/include\"" >> $1/.bashrc
-echo "export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:$APP/lib\"" >> $1/.bashrc
-echo "export PKG_CONFIG_PATH=\"$PKG_CONFIG_PATH:$APP/lib/pkgconfig\"" >> $1/.bashrc
-echo "export PATH=\"$PATH:$APP/bin\"" >> $1/.profile
-echo "export INCLUDE_PATH=\"$INCLUDE_PATH:$APP/include\"" >> $1/.profile
-echo "export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:$APP/lib\"" >> $1/.profile
-echo "export PKG_CONFIG_PATH=\"$PKG_CONFIG_PATH:$APP/lib/pkgconfig\"" >> $1/.profile
-. ~/.profile
-
-echo $PATH
 
 echo "-----> Janus install complete"
